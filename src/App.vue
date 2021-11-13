@@ -1,34 +1,65 @@
 <template>
   <div id="app">
+    <MainLayout>
+      <loader v-if="loading" />
+      <keep-alive>
+        <router-view v-if="!loading" />
+      </keep-alive>
+    </MainLayout>
   </div>
 </template>
 
 <script>
+import MainLayout from '@/layouts/MainLayout';
+import Loader from '@/components/Loader';
 
 export default {
-  name: "App",
-  components: {
-    Form,
+  name: 'App',
+  components: { Loader, MainLayout },
+  created() {
+    this.$store.dispatch('home/FETCH_ITEMS');
   },
+  computed: {
+    loading() {
+      return this.$store.state.home.loading;
+    }
+  }
 };
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  color: #2c3e50;
-  background-color: #fafafa;
-  padding: 24px;
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;600;700&display=swap');
+
+* {
   box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+a {
+  color: #005bff;
+  text-decoration: none;
+
+  transition: all 0.2s ease;
+}
+
+a.active {
+  color: #001a34;
+  text-decoration: underline;
+}
+
+a:hover,
+a:active {
+  color: #001a34;
 }
 
 html,
 body,
 #app {
   height: 100%;
-}
 
-* {
-  box-sizing: border-box;
+  color: #001a34;
+  font-weight: 500;
+  font-family: 'Raleway', sans-serif;
 }
 </style>
