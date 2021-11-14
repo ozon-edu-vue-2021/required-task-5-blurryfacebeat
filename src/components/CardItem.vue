@@ -1,19 +1,42 @@
 <template>
   <div class="card-item">
-    <div></div>
+    <HeartIcon :class="cardFavoriteClasses" @click="TO_FAVORITE(item.uid)" />
+    <div class="item-image"></div>
     <div class="item-text">
-      <span class="item-price">{{ price }}₽</span>
+      <span class="item-price">{{ item.price }}₽</span>
+      <span class="item-name">{{ item.dish }}</span>
     </div>
-    <button>В корзину</button>
-    <div v-if="false"></div>
+    <div class="item-actions">
+      <button @click="ADD_TO_CART(item.uid)" v-if="!item.quantity">
+        В корзину
+      </button>
+      <div class="item-counter" v-else>
+        <button class="counter-minus" @click="REMOVE_IN_CART(item.uid)">
+          -
+        </button>
+        <span class="counter-text">{{ item.quantity }}</span>
+        <button class="counter-minus" @click="ADD_TO_CART(item.uid)">+</button>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
+import { mapMutations } from 'vuex';
+
 import { getRandomNumber } from '@/helpers/getRandomNumber';
+import {
+  ADD_ITEM_PRICE,
+  ADD_TO_CART,
+  REMOVE_IN_CART,
+  TO_FAVORITE
+} from '@/store/mutationsVariables';
+
+import HeartIcon from '@/assets/icons/heart.svg';
 
 export default {
   name: 'CardItem',
+  components: { HeartIcon },
   props: {
     item: {
       type: Object,
@@ -22,18 +45,80 @@ export default {
   },
   data() {
     return {
-      price: getRandomNumber(15, 999)
+      price: getRandomNumber(15, 999),
+      image: 'image'
     };
   },
-  created() {
-    console.log(this.item);
+  mounted() {
+    this.ADD_ITEM_PRICE({ uid: this.item.uid, price: this.price });
+  },
+  methods: {
+    ...mapMutations([ADD_TO_CART, REMOVE_IN_CART, TO_FAVORITE, ADD_ITEM_PRICE])
+  },
+  computed: {
+    cardFavoriteClasses() {
+      return ['card-favorite', this.item.isFavourite ? 'active' : ''];
+    }
   }
 };
 </script>
 
 <style scoped>
 .card-item {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
   width: 190px;
-  height: 190px;
+  height: 250px;
+  position: relative;
+
+  border: 1px solid ghostwhite;
+  box-shadow: 1px 5px 10px 5px rgba(0, 0, 0, 0.05);
+}
+
+.card-favorite {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  width: 25px;
+  height: 25px;
+
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.card-favorite:hover {
+  fill: #ff3838;
+}
+
+.card-favorite.active {
+  fill: #ff3838;
+}
+
+.card-favorite:active {
+  transform: scale(0.95);
+}
+
+.item-image {
+  width: 100%;
+  margin-bottom: 10px;
+  height: 120px;
+
+  object-fit: cover;
+}
+
+.item-text {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+}
+
+.item-actions {
+  margin-top: auto;
+}
+
+.item-counter {
+  display: flex;
+  grid-gap: 10px;
 }
 </style>

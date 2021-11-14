@@ -10,6 +10,8 @@
 </template>
 
 <script>
+import { FETCH_ITEMS } from '@/store/mutationsVariables';
+
 import MainLayout from '@/layouts/MainLayout';
 import Loader from '@/components/Loader';
 
@@ -17,7 +19,7 @@ export default {
   name: 'App',
   components: { Loader, MainLayout },
   created() {
-    this.$store.dispatch('home/FETCH_ITEMS');
+    this.$store.dispatch(FETCH_ITEMS);
   },
   computed: {
     loading() {

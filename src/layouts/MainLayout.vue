@@ -3,6 +3,7 @@
     <header>
       <router-link to="/" exact>Главная</router-link>
       <router-link to="/card">Корзина</router-link>
+      <router-link to="/favorites">Избранное</router-link>
     </header>
     <main>
       <slot />
