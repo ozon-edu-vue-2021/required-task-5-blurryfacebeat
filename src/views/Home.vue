@@ -1,6 +1,7 @@
 <template>
   <div class="home">
-    <div class="items-container">
+    <p v-if="!items.length">Список товаров пуст.</p>
+    <div v-else class="items-container">
       <card-item v-for="item in items" :key="item.uid" :item="item" />
     </div>
   </div>

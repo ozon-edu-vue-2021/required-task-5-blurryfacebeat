@@ -9,6 +9,7 @@ import {
   ADD_ITEM_PRICE,
   CLEAR_CART
 } from '@/store/mutationsVariables';
+import { getRandomNumber } from '@/helpers/getRandomNumber';
 
 export default {
   state: {
@@ -54,9 +55,10 @@ export default {
       }
     },
 
-    [ADD_ITEM_PRICE](state, { uid, price }) {
-      const item = state.items.find((item) => item.uid === uid);
-      Vue.set(item, 'price', price);
+    [ADD_ITEM_PRICE](state) {
+      state.items.forEach((item) => {
+        Vue.set(item, 'price', getRandomNumber(15, 999));
+      });
     },
 
     [CLEAR_CART](state) {
@@ -73,6 +75,7 @@ export default {
         .get('https://random-data-api.com/api/food/random_food?size=30')
         .then((response) => {
           commit(FETCH_ITEMS, response.data);
+          commit(ADD_ITEM_PRICE);
           commit(DISABLE_LOADING, false);
         })
         .catch((error) => {

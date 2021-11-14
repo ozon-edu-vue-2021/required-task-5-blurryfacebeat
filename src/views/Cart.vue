@@ -14,6 +14,7 @@
       <button v-if="cartItems.length" @click="clearCart">
         Очистить корзину
       </button>
+      <button v-if="cartItems.length" @click="getOrder">Оформить заказ</button>
     </div>
   </div>
 </template>
@@ -31,6 +32,14 @@ export default {
   methods: {
     clearCart() {
       this.$store.commit(CLEAR_CART);
+    },
+
+    getOrder() {
+      let items = 'Ваш заказ:';
+      this.cartItems.forEach((item) => {
+        items += `\n${item.dish} (${item.quantity})`;
+      });
+      window.alert(items);
     }
   },
   computed: {
@@ -61,6 +70,9 @@ export default {
 }
 
 .cart-info {
+  display: flex;
+  flex-direction: column;
+  grid-gap: 20px;
   width: 500px;
   height: 700px;
   padding: 30px;

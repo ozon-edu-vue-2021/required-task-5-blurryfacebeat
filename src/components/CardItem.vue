@@ -1,7 +1,9 @@
 <template>
   <div class="card-item">
-    <HeartIcon :class="cardFavoriteClasses" @click="TO_FAVORITE(item.uid)" />
-    <div class="item-image"></div>
+    <HeartIcon @click="TO_FAVORITE(item.uid)" :class="cardFavoriteClasses" />
+    <div class="item-image">
+      <img src="../assets/images/6126040354.webp" alt="" />
+    </div>
     <div class="item-text">
       <span class="item-price">{{ item.price }}₽</span>
       <span class="item-name">{{ item.dish }}</span>
@@ -11,11 +13,11 @@
         В корзину
       </button>
       <div class="item-counter" v-else>
-        <button class="counter-minus" @click="REMOVE_IN_CART(item.uid)">
+        <button @click="REMOVE_IN_CART(item.uid)" class="counter-minus">
           -
         </button>
         <span class="counter-text">{{ item.quantity }}</span>
-        <button class="counter-minus" @click="ADD_TO_CART(item.uid)">+</button>
+        <button @click="ADD_TO_CART(item.uid)" class="counter-minus">+</button>
       </div>
     </div>
   </div>
@@ -23,8 +25,6 @@
 
 <script>
 import { mapMutations } from 'vuex';
-
-import { getRandomNumber } from '@/helpers/getRandomNumber';
 import {
   ADD_ITEM_PRICE,
   ADD_TO_CART,
@@ -43,15 +43,6 @@ export default {
       required: true
     }
   },
-  data() {
-    return {
-      price: getRandomNumber(15, 999),
-      image: 'image'
-    };
-  },
-  mounted() {
-    this.ADD_ITEM_PRICE({ uid: this.item.uid, price: this.price });
-  },
   methods: {
     ...mapMutations([ADD_TO_CART, REMOVE_IN_CART, TO_FAVORITE, ADD_ITEM_PRICE])
   },
@@ -67,7 +58,6 @@ export default {
 .card-item {
   display: flex;
   flex-direction: column;
-  padding: 20px;
   width: 190px;
   height: 250px;
   position: relative;
@@ -107,14 +97,24 @@ export default {
   object-fit: cover;
 }
 
+.item-image img {
+  width: 100%;
+  margin-bottom: 10px;
+  height: 120px;
+
+  object-fit: cover;
+}
+
 .item-text {
   display: flex;
   flex-direction: column;
   margin-bottom: 10px;
+  padding: 0 20px;
 }
 
 .item-actions {
   margin-top: auto;
+  padding: 0 20px 20px 20px;
 }
 
 .item-counter {
