@@ -15,7 +15,7 @@ export default {
   components: { CardItem },
   computed: {
     items() {
-      return this.$store.state.home.items;
+      return this.$store.state.items;
     }
   }
 };

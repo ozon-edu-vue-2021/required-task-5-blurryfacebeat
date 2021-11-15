@@ -5,3 +5,4 @@ export const ADD_TO_CART = 'ADD_TO_CART';
 export const REMOVE_IN_CART = 'REMOVE_IN_CART';
 export const ADD_ITEM_PRICE = 'ADD_ITEM_PRICE';
 export const CLEAR_CART = 'CLEAR_CART';
+export const FETCH_ITEMS_ACTION = 'FETCH_ITEMS_ACTION';
