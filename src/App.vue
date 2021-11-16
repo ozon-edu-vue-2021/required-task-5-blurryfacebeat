@@ -10,23 +10,29 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { Component, Vue } from 'vue-property-decorator';
+import { useStore } from 'vuex-simple';
+
 import { FETCH_ITEMS_ACTION } from '@/store/mutationsVariables';
+
 import MainLayout from '@/layouts/MainLayout';
 import Loader from '@/components/Loader';
+import { HomeModule } from '@/store/modules/home/home';
 
-export default Vue.extend({
-  name: 'App',
-  components: { Loader, MainLayout },
-  created() {
-    this.$store.dispatch(FETCH_ITEMS_ACTION);
-  },
-  computed: {
-    loading() {
-      return this.$store.state.loading;
-    }
+@Component({
+  components: { Loader, MainLayout }
+})
+export default class App extends Vue {
+  public store: HomeModule = useStore(this.$store);
+
+  public get loading(): boolean {
+    return this.store.loading;
   }
-});
+
+  created() {
+    this.store[FETCH_ITEMS_ACTION]();
+  }
+}
 </script>
 
 <style>
