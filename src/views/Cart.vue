@@ -19,33 +19,43 @@
   </div>
 </template>
 
-<script>
-import { mapGetters } from 'vuex';
+<script lang="ts">
+import { Component, Vue } from 'vue-property-decorator';
 
 import { CLEAR_CART } from '@/store/mutationsVariables';
 
 import CardItem from '@/components/CardItem';
+import { HomeModule } from '@/store/modules/home/home';
+import { useStore } from 'vuex-simple';
 
-export default {
-  name: 'Card',
-  components: { CardItem },
-  methods: {
-    clearCart() {
-      this.$store.commit(CLEAR_CART);
-    },
-
-    getOrder() {
-      let items = 'Ваш заказ:';
-      this.cartItems.forEach((item) => {
-        items += `\n${item.dish} (${item.quantity})`;
-      });
-      window.alert(items);
-    }
-  },
-  computed: {
-    ...mapGetters(['cartItems', 'fullCoast'])
+@Component({
+  components: {
+    CardItem
   }
-};
+})
+export default class Card extends Vue {
+  public store: HomeModule = useStore(this.$store);
+
+  public clearCart(): void {
+    this.store[CLEAR_CART]();
+  }
+
+  public getOrder(): void {
+    let items = 'Ваш заказ:';
+    this.cartItems.forEach((item) => {
+      items += `\n${item.dish} (${item.quantity})`;
+    });
+    window.alert(items);
+  }
+
+  public get cartItems(): Array<any> {
+    return this.store.cartItems;
+  }
+
+  public get fullCoast(): number {
+    return this.store.fullCoast;
+  }
+}
 </script>
 
 <style scoped>

@@ -7,18 +7,24 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import { Component, Vue } from 'vue-property-decorator';
 import CardItem from '@/components/CardItem';
+import { HomeModule } from '@/store/modules/home/home';
+import { useStore } from 'vuex-simple';
 
-export default {
-  name: 'Home',
-  components: { CardItem },
-  computed: {
-    items() {
-      return this.$store.state.home.items;
-    }
+@Component({
+  components: {
+    CardItem
   }
-};
+})
+export default class Home extends Vue {
+  public store: HomeModule = useStore(this.$store);
+
+  public get items(): Array<any> {
+    return this.store.items;
+  }
+}
 </script>
 
 <style scoped>

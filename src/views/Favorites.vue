@@ -10,18 +10,24 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import { Component, Vue } from 'vue-property-decorator';
 import CardItem from '@/components/CardItem';
+import { HomeModule } from '@/store/modules/home/home';
+import { useStore } from 'vuex-simple';
 
-export default {
-  name: 'Favorites',
-  components: { CardItem },
-  computed: {
-    items() {
-      return this.$store.getters.favoritesItems;
-    }
+@Component({
+  components: {
+    CardItem
   }
-};
+})
+export default class Favorites extends Vue {
+  public store: HomeModule = useStore(this.$store);
+
+  public get items(): Array<any> {
+    return this.store.favoritesItems;
+  }
+}
 </script>
 
 <style scoped>

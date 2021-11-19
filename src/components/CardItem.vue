@@ -1,6 +1,6 @@
 <template>
   <div class="card-item">
-    <HeartIcon @click="TO_FAVORITE(item.uid)" :class="cardFavoriteClasses" />
+    <HeartIcon @click="toFavorite(item.uid)" :class="cardFavoriteClasses" />
     <div class="item-image">
       <img src="../assets/images/6126040354.webp" alt="" />
     </div>
@@ -9,49 +9,56 @@
       <span class="item-name">{{ item.dish }}</span>
     </div>
     <div class="item-actions">
-      <button @click="ADD_TO_CART(item.uid)" v-if="!item.quantity">
+      <button @click="addToCart(item.uid)" v-if="!item.quantity">
         В корзину
       </button>
       <div class="item-counter" v-else>
-        <button @click="REMOVE_IN_CART(item.uid)" class="counter-minus">
-          -
-        </button>
+        <button @click="removeInCart(item.uid)" class="counter-minus">-</button>
         <span class="counter-text">{{ item.quantity }}</span>
-        <button @click="ADD_TO_CART(item.uid)" class="counter-minus">+</button>
+        <button @click="addToCart(item.uid)" class="counter-minus">+</button>
       </div>
     </div>
   </div>
 </template>
 
-<script>
-import { mapMutations } from 'vuex';
+<script lang="ts">
+import { Component, Prop, Vue } from 'vue-property-decorator';
 import {
-  ADD_ITEM_PRICE,
   ADD_TO_CART,
   REMOVE_IN_CART,
   TO_FAVORITE
 } from '@/store/mutationsVariables';
 
 import HeartIcon from '@/assets/icons/heart.svg';
+import { HomeModule } from '@/store/modules/home/home';
+import { useStore } from 'vuex-simple';
 
-export default {
-  name: 'CardItem',
-  components: { HeartIcon },
-  props: {
-    item: {
-      type: Object,
-      required: true
-    }
-  },
-  methods: {
-    ...mapMutations([ADD_TO_CART, REMOVE_IN_CART, TO_FAVORITE, ADD_ITEM_PRICE])
-  },
-  computed: {
-    cardFavoriteClasses() {
-      return ['card-favorite', this.item.isFavourite ? 'active' : ''];
-    }
+@Component({
+  components: {
+    HeartIcon
   }
-};
+})
+export default class CardItem extends Vue {
+  public store: HomeModule = useStore(this.$store);
+
+  @Prop({ type: Object, required: true }) item: any;
+
+  public get cardFavoriteClasses(): Array<string> {
+    return ['card-favorite', this.item.isFavourite ? 'active' : ''];
+  }
+
+  public addToCart(uid: string | number): void {
+    this.store[ADD_TO_CART](uid);
+  }
+
+  public removeInCart(uid: string | number): void {
+    this.store[REMOVE_IN_CART](uid);
+  }
+
+  public toFavorite(uid: string | number): void {
+    this.store[TO_FAVORITE](uid);
+  }
+}
 </script>
 
 <style scoped>
